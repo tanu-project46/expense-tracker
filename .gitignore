@@ -1,8 +1,11 @@
-#Environment variable
-.env
 #python
 __pycache__/
 *.pyc
+venv/
+.venv/
+
+#Environment variable
+.env
 
 #Node
 node_modules/
