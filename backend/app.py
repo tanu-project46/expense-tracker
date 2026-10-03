@@ -353,19 +353,35 @@ def export_excel():
 
 @app.route("/api/analysis", methods=["GET"])
 def analysis():
-    user_email=request.args.get("email")
-    df = pd.read_excel(Excel_File)
-    if user_email:
-        df=df[df["User Email"]==user_email]
-    total_income = df[df["Type"]=="Income"]["Amount"].sum()
-    total_expense = df[df["Type"]=="Expense"]["Amount"].sum()
-    balance = total_income - total_expense
+    try:
+        user_email = request.args.get("email")
 
-    return jsonify({
-        "total_income":total_income,
-        "total_expense":total_expense,
-        "balance":balance
-    })
+        df = pd.read_excel(Excel_File)
+
+        if user_email:
+            df = df[df["User Email"].astype(str).str.strip() == user_email.strip()]
+
+        total_income = pd.to_numeric(
+            df.loc[df["Type"].astype(str).str.strip().str.lower() == "income", "Amount"],
+            errors="coerce"
+        ).sum()
+
+        total_expense = pd.to_numeric(
+            df.loc[df["Type"].astype(str).str.strip().str.lower() == "expense", "Amount"],
+            errors="coerce"
+        ).sum()
+
+        balance = total_income - total_expense
+
+        return jsonify({
+            "total_income": int(total_income),
+            "total_expense": int(total_expense),
+            "balance": int(balance)
+        })
+
+    except Exception as e:
+        print("Analysis error:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/api/ai-budget",methods=["POST"])
 def ai_budget():
