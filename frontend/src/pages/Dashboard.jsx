@@ -12,7 +12,7 @@ function Dashboard() {
 const loadAnalysis=async()=>{
     try{
         const currentUser = getCurrentUser();
-        const response = await fetch(`http://127.0.0.1:5000/api/analysis?email=${encodeURIComponent(currentUser.email)}`);
+        const response = await fetch(`https://expense-tracker-backend-jd7o.onrender.com/api/analysis?email=${encodeURIComponent(currentUser.email)}`);
         if(!response.ok){
             throw new Error("Failed to load anaysis");
         }
@@ -115,7 +115,7 @@ if (budgetPercentage >=100){
 
     const handleExportExcel = async () => {
         try{
-            const response = await fetch("http://127.0.0.1:5000/api/export");
+            const response = await fetch("https://expense-tracker-backend-jd7o.onrender.com/api/export");
             if (!response.ok){
                 throw new Error("Failed to export transactions");
             }
@@ -158,7 +158,7 @@ if (budgetPercentage >=100){
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:5000/api/expenses?email=${encodeURIComponent(user.email)}`);
+            const response = await fetch(`https://expense-tracker-backend-jd7o.onrender.com/api/expenses?email=${encodeURIComponent(user.email)}`);
             if (!response.ok) {
                 throw new Error("Failed to load transactions");
             }
