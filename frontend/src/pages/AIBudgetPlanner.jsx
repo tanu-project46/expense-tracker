@@ -34,6 +34,9 @@ const handlesend= async()=>{
             }),
         });
         const data = await response.json();
+        if(!response.ok){
+            throw new Error(data.error || "AI Budget request failed");
+        }
         console.log("AI Response:",data);
         setChatMessage((prev)=>[
             ...prev,
@@ -43,12 +46,20 @@ const handlesend= async()=>{
             },
             {
                 sender:"ai",
-                text:data.reply
+                text:data.reply || "Sorry, I couldn't generate a response. Please try again."
             }
         ]);
         setMessage("");
     }catch(error){
         console.error("Ai Budget Error:",error);
+        setChatMessage((prev)=>[
+            ...prev,
+            {
+                sender:"ai",
+                text:"Sorry, Something went wrong. Please try again later."
+            }
+        ]);
+        setMessage("");
     } finally {
         setLoading(false);
     }
@@ -58,6 +69,9 @@ const handlesend= async()=>{
         <div className="ai-budget-page">
             <h1>AI Budget planner 🤖</h1>
             <p>Ask AI for help with your budget.</p>
+            <button className="clear-chat-btn" onClick={() => setChatMessage([])}>
+                Clear Chat
+            </button>
         <div className="chat-box">
             <div className="ai-message">
                 Hello! 👋 I'm your AI Budget planner.
@@ -67,9 +81,25 @@ const handlesend= async()=>{
              <input type="text" placeholder="Ask about your budget..." value={message}
              onChange={(e)=>
                 setMessage(e.target.value)
-             } />
-             <button onClick={handlesend}>send</button>
+             }
+             onKeyDown={(e)=>{
+                if (e.key=="Enter"){
+                    handlesend();
+                }
+             }} />
+             <button onClick={handlesend} disabled={loading}>{loading ? "Thinking...":"send"}</button>
             </div>
+            {loading && (
+                <div className="ai-message">
+                    <div className="ai-avatar">🤖</div>
+                    <div className="ai-message-content">
+                        <div className="ai-name">AI Budget Planner:</div>
+                        <div className="ai-response-text">
+                            Thinking...
+                        </div>
+                    </div>
+                </div>
+            )}
             {chatMessage.map((chat, index)=>
             (
                 chat.sender === "user"?(

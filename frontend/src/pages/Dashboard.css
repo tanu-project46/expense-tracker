@@ -206,11 +206,10 @@ transition: width 0.4s ease;
 }
 
 .charts-row{
-  display: grid;
-  align-items:start;
-  gap: 30px;
+  display: flex;
+  align-items:flex-start;
+  gap: 100px;
   width: 100%;
-  grid-template-columns: 1fr 1fr;
 }
 .charts-row .chart-container{
   width: 100%;
@@ -566,5 +565,19 @@ transition: width 0.4s ease;
 
   .transaction-form {
     padding: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .charts-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .charts-row .chart-container {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
   }
 }

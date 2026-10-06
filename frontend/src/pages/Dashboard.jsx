@@ -320,8 +320,9 @@ if (budgetPercentage >=100){
  <div className="charts-row">
 <div className="chart-container">
     <h2>Income vs Expense</h2>
-    <PieChart width={400} height={300}>
-        <Pie
+    <ResponsiveContainer width="100%" height={300}>
+    <PieChart >      
+          <Pie
             data={chartData}
             dataKey="value"
             nameKey="name"
@@ -341,6 +342,7 @@ if (budgetPercentage >=100){
         <Tooltip />
         <Legend />
     </PieChart>
+    </ResponsiveContainer>
 </div>
 <div className="chart-container">
     <h2>Monthly Income and Expense Bar Chart</h2>
